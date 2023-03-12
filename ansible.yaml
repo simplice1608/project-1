@@ -1,0 +1,8 @@
+- hosts: prod
+  tasks:
+  - name: copy deployment file to kubernetes master 
+    copy:
+      src: deployment.yaml
+      dest: /root/
+  - name: update the application changes 
+    command: kubectl apply -f /root/deployment.yaml
