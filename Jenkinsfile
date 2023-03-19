@@ -7,7 +7,7 @@ currentBuild.displayName = "Build # "+currentBuild.number
 
 pipeline{
 
-   agent { label 'node01' }
+   agent { label 'node1' }
    environment{
 	    Docker_tag = getDockerTag()
         }
@@ -19,7 +19,7 @@ pipeline{
    stages{
        stage("Checkout"){
         steps{
-             git url: 'https://github.com/nkarwa-panitech/devops-webapp-maven.git', branch: 'master'
+             git url: 'https://github.com/simplice1608/project-1.git', branch: 'main'
              sh "ls -ll"
         }
        }
@@ -99,17 +99,17 @@ pipeline{
        stage("Prod build"){
         steps{
             script{
-                   sh 'docker build . -t nkarwapanitech/devops-training:$Docker_tag'
+                   sh 'docker build . -t simplice1608/docker-project1:$Docker_tag'
 		          withCredentials([string(credentialsId: 'docker', variable: 'docker_password')]) {		    
-				  sh 'docker login -u nkarwapanitech -p $docker_password'
-				  sh 'docker push nkarwapanitech/devops-training:$Docker_tag'
+				  sh 'docker login -u simplice1608 -p $docker_password'
+				  sh 'docker push simplice1608/docker-project1:$Docker_tag'
 			}
                        }
                     }
         }
 
        stage('ansible playbook'){
-	                agent { label 'node01' }
+	                agent { label 'node1' }
 			steps{
 			 	script{
 				    sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
@@ -139,7 +139,7 @@ pipeline{
 }
 def custom_msg()
 {
-  def JENKINS_URL= "http://3.233.241.149:8080/"
+  def JENKINS_URL= "http://3.92.179.42:8080/"
   def JOB_NAME = env.JOB_NAME
   def BUILD_ID= env.BUILD_ID
   def JENKINS_LOG= " Success: Job [${env.JOB_NAME}] Logs path: ${JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText"
